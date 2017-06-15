@@ -106,4 +106,16 @@ describe('File type filter', () => {
         }) 
     })
 
+    it('Emit file type', (done) => {
+        const inputStream = fs.createReadStream('test/sample.jpg')
+        const filter = new FileTypeFilter('image/jpeg')
+        const counterStream = new ByteCounter()
+
+        const p = inputStream.pipe(filter).pipe(counterStream)
+        filter.on('file-type', (t) => {
+            expect(t).to.equal('image/jpeg')
+            done()
+        }) 
+    })
+        
 })

@@ -4,6 +4,7 @@ const expect = chai.expect
 const fs = require('fs')
 const NullDuplexStream = require('null-duplex-stream')
 const ByteCounter = require('stream-counter')
+const bytechunker = require('bytechunker')
 
 const FileTypeFilter = require('../lib/file-type-filter')
 
@@ -117,5 +118,19 @@ describe('File type filter', () => {
             done()
         }) 
     })
+
+    it('Allow file to pass (small chunks)', (done) => {
+        const inputStream = fs.createReadStream('test/sample.jpg')
+        const chunker = bytechunker(100)
+        const filter = new FileTypeFilter('image/jpeg')
+        const counterStream = new ByteCounter()
+
+        const p = inputStream.pipe(chunker).pipe(filter).pipe(counterStream)
+        counterStream.on('finish', () => {
+            expect(counterStream.bytes).to.equal(69214)
+            done()
+        }) 
+    })
+
         
 })

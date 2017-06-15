@@ -6,7 +6,7 @@ const NullDuplexStream = require('null-duplex-stream')
 const ByteCounter = require('stream-counter')
 const bytechunker = require('bytechunker')
 
-const FileTypeFilter = require('../lib/file-type-filter')
+const FileTypeFilter = require('..')
 
 describe('File type filter', () => {
     it('Allow file to pass (single type)', (done) => {
